@@ -1,0 +1,32 @@
+// no-nonsense , fast Jenkins Installation on CentOS7 
+
+sudo yum update -y
+sudo yum install epel-release -y
+sudo yum install java-11-openjdk -y
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo --no-check-certificate
+sudo rpm --import http://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo yum install jenkins -y
+// customize port optional*
+sudo vi /lib/systemd/system/jenkins.service
+// change port no. to 8090 from 8080 i.e. Environment="JENKINS_PORT=8090"
+sudo systemctl enable jenkins
+sudo systemctl start jenkins 
+sudo systemctl status jenkins
+
+// open the port
+sudo yum install firewalld -y
+sudo systemctl start firewalld
+sudo systemctl status firewalld
+sudo firewall-cmd --zone=public --add-port=8090/tcp --permanent
+sudo firewall-cmd --list-ports
+
+hostname -i // get the local ip
+// access url
+http://<localip>:<custom_port_no>
+
+// enter password
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+// install recommended plugins
+// setup admin account 
+// start using Jenkins
